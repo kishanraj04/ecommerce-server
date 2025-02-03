@@ -91,12 +91,13 @@ export const searchProduct = asyncHandler(async (req, res) => {
 });
 
 
+// price filter
 export const priceFilter = asyncHandler(async (req,res) => {
     const {gt,lt} = req.params
     const data = await productSchema.find({
         price: { $gte: gt, $lte:lt }
     });
-    
+
     res.status(200).json({
         sucess:true,
         message:"filtered data",

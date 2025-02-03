@@ -2,6 +2,7 @@ import express from 'express';
 import productRoute from './routes/products.Route.js';
 import dotenv from 'dotenv';
 import './config/dbConnection.js'
+import userRouter from './routes/user.Route.js';
 // Load environment variables
 dotenv.config();
 
@@ -27,6 +28,9 @@ app.use(express.json())
 // Product route
 app.use('/api/v1', productRoute);
 
+
+// User Route
+app.use('/api/v1',userRouter)
 
 // global error handler
 app.use((err, req, res, next) => {
