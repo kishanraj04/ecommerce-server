@@ -12,7 +12,6 @@ process.on('uncaughtException',(err)=>{
     process.exit(1)
 })
 
-console.log(object);
 
 const PORT = process.env.PORT ; 
 const app = express();
@@ -32,7 +31,15 @@ app.use('/api/v1', productRoute);
 // global error handler
 app.use((err, req, res, next) => {
      const statusCode = err.status || 500;
-     console.log("err ",err.status);
+     if(err.name=='CastError')
+     {
+        
+       return res.status(404).json({
+            success: false,
+            message: "invalid id"
+        });
+     }
+
      res.status(statusCode).json({
          success: false,
          message: err.message || "Internal Server Error"
