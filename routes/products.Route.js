@@ -1,5 +1,5 @@
 import express from 'express'
-import { createProduct, deletSingleProduct, getAllPoduct, getSingleProduct, searchProduct, updateProduct } from '../controller/product.controller.js'
+import { createProduct, deletSingleProduct, getAllPoduct, getSingleProduct, priceFilter, searchProduct, updateProduct } from '../controller/product.controller.js'
 
 const productRoute = express.Router()
 
@@ -22,5 +22,8 @@ productRoute.post('/product/create',createProduct)
 // search a product
 productRoute.get('/product/search/:category',searchProduct)
 
+
+// price filter 
+productRoute.get('/product/price/:gt/:lt',priceFilter)
 
 export default productRoute
