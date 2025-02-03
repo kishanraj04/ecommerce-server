@@ -5,6 +5,15 @@ import './config/dbConnection.js'
 // Load environment variables
 dotenv.config();
 
+
+// handling uncaught error
+process.on('uncaughtException',(err)=>{
+    console.log("uncaught error message :",err.message);
+    process.exit(1)
+})
+
+console.log(object);
+
 const PORT = process.env.PORT ; 
 const app = express();
 
@@ -32,10 +41,11 @@ app.use((err, req, res, next) => {
 
 
 
-app.listen(PORT, (err) => {
+const server = app.listen(PORT, (err) => {
     try {
         console.log("server listen on ",PORT);
     } catch (error) {
         console.log("server crashed");
     }
 });
+
