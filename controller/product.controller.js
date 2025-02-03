@@ -43,7 +43,7 @@ export const getSingleProduct = asyncHandler(async(req,res,next)=>{
 })
 
 // delete single product --admin
-export const deletSingleProduct =async (req,res)=>{
+export const deletSingleProduct = asyncHandler(async (req,res)=>{
     try {
         const {id} = req.params
         const deleted = await productSchema.deleteOne({_id:id})
@@ -56,11 +56,11 @@ export const deletSingleProduct =async (req,res)=>{
         return res.status(500).json({sucess:false,message:error.message})
     }
 
-}
+})
 
 
 // update product --admin
-export const updateProduct = async(req,res)=>{
+export const updateProduct = asyncHandler(async(req,res)=>{
     try {
         const {id} = req.params
         const updated = await productSchema.findByIdAndUpdate(id,req.body,{new:true})
@@ -70,8 +70,25 @@ export const updateProduct = async(req,res)=>{
         res.status(500).json({sucess:false,message:error.message})
     }
 
-}
+})
 
+
+// search a product
+export const searchProduct = asyncHandler(async (req, res) => {
+    const { category } = req.params;
+    // MongoDB Full-Text Search
+    const data = await productSchema.find({ title: { $regex:category, $options: "i" } })
+
+    if (!data.length) {
+        return res.status(404).json({ success: false, message: "Product not found" });
+    }
+
+    res.status(200).json({
+        success: true,
+        message: "Searched products",
+        data
+    });
+});
 
 
 
