@@ -21,10 +21,6 @@ const app = express();
 app.use(express.json())
 
 
-
-
-
-
 // Product route
 app.use('/api/v1', productRoute);
 

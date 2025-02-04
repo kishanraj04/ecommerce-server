@@ -1,0 +1,18 @@
+import { asyncHandler } from "../middleware/asyncErrorHandler.js"
+import userModel from "../model/userModel.js"
+import bcrypt from 'bcrypt'
+import { generateAndSaveToken } from "../utils/tokens/generateAndSaveToken.js"
+// login user
+export const signInUser = asyncHandler(async (req,res)=>{
+    const {email,password} = req.body
+    const user = await userModel.findOne({email}).select('+password')
+    
+    const isCorrect = await bcrypt.compare(password,user.password)
+    
+    if(isCorrect){
+      return  generateAndSaveToken(user?._id,req,res)
+    }
+    else{
+        return res.status(401).json({status:false,message:"invalid credentials"})
+    }
+})
