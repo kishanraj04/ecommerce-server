@@ -17,7 +17,7 @@ export const createProduct =  asyncHandler(async(req, res) => {
 // get all product
 export const getAllPoduct = asyncHandler(async(req,res)=>{
        
-        const product = await productSchema.findOne()
+        const product = await productSchema.find({})
         res.status(200).json({sucess:true,message:"get all product",product})
 })
 
