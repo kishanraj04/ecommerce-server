@@ -3,6 +3,7 @@ import productRoute from './routes/products.Route.js';
 import dotenv from 'dotenv';
 import './config/dbConnection.js'
 import userRouter from './routes/user.Route.js';
+import cookieParser from 'cookie-parser';
 // Load environment variables
 dotenv.config();
 
@@ -19,7 +20,7 @@ const app = express();
 
 // middlewares
 app.use(express.json())
-
+app.use(cookieParser())
 
 // Product route
 app.use('/api/v1', productRoute);
