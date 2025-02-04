@@ -8,11 +8,13 @@ const userSchema = mongoose.Schema({
     },
     email:{
         type:String,
-        required:true
+        required:true,
+        unique:true
     },
     contact:{
         type:Number,
-        required:true
+        required:true,
+        unique:true
     },
     password:{
         type:String,
@@ -41,6 +43,8 @@ const userSchema = mongoose.Schema({
     }
 })
 
+
+//hash the password before saving the user details
 userSchema.pre("save",async function(next){
     if(!this.isModified("password")){
         next()

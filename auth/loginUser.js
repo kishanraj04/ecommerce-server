@@ -7,8 +7,11 @@ export const signInUser = asyncHandler(async (req,res)=>{
     const {email,password} = req.body
     const user = await userModel.findOne({email}).select('+password')
     
+    if(!user){
+      return res.status(404).json({success:false,message:"user not found"})
+    }
     const isCorrect = await bcrypt.compare(password,user.password)
-    
+   
     if(isCorrect){
       return  generateAndSaveToken(user?._id,req,res)
     }

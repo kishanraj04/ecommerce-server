@@ -15,3 +15,9 @@ export const signUpUser = asyncHandler(async(req,res)=>{
 })
 
 
+// get my profile
+export const getMyProfile = asyncHandler(async(req,res)=>{
+    const user = await req.user
+    
+    return res.status(200).json({success:true,message:"user found",user})
+})

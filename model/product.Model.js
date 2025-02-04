@@ -43,6 +43,12 @@ const productSchema = new mongoose.Schema({
   meta: { type: metaSchema, required: true },
   images: { type: [String], required: true },
   thumbnail: { type: String, required: true },
+  // referensing user inside it
+  createdBy:{
+    type:mongoose.Schema.ObjectId,
+    ref:"usermodel",
+    required:true
+  }
 });
 
 // Export the model
