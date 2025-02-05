@@ -1,5 +1,5 @@
 import express from 'express'
-import {  getAllUsers, getMyProfile, signUpUser, updateMyProfile, updatePassword } from '../controller/user.controller.js'
+import {  getAllUsers, getMyProfile, getSingleUser, signUpUser, updateMyProfile, updatePassword } from '../controller/user.controller.js'
 import { signInUser } from '../auth/loginUser.js'
 import { directLogin } from '../auth/directLoin.js'
 import { logoutUser } from '../auth/logoutUser.js'
@@ -32,5 +32,8 @@ userRouter.post('/update/profile',isAuthenticated,updateMyProfile)
 
 // get all user
 userRouter.get('/all-user',isAuthenticated,authorizedRoles,getAllUsers)
+
+// get single user
+userRouter.get('/single/user/:id',isAuthenticated,authorizedRoles,getSingleUser)
 
 export default userRouter

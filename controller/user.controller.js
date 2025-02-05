@@ -74,3 +74,16 @@ export const getAllUsers = asyncHandler(async(req,res)=>{
         res.status(200).json({success:true,message:"users found",allUsers})
     }
 })
+
+// get single user
+export const getSingleUser = asyncHandler(async(req,res)=>{
+    const {id} = req.params 
+    
+    const singleUser = await userModel.findOne({_id:id})
+    if(!singleUser){
+        return res.status(404).json({success:false,message:"user not found"})
+    }
+    else{
+        return res.status(200).json({success:true,message:"user found",singleUser})
+    }
+})
