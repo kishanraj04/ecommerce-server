@@ -1,9 +1,10 @@
 import express from 'express'
-import {  getMyProfile, signUpUser, updateMyProfile, updatePassword } from '../controller/user.controller.js'
+import {  getAllUsers, getMyProfile, signUpUser, updateMyProfile, updatePassword } from '../controller/user.controller.js'
 import { signInUser } from '../auth/loginUser.js'
 import { directLogin } from '../auth/directLoin.js'
 import { logoutUser } from '../auth/logoutUser.js'
 import { isAuthenticated } from '../middleware/isAuthenticated.js'
+import { authorizedRoles } from '../middleware/authorizedRoles.js'
 
 const userRouter = express.Router()
 
@@ -28,5 +29,8 @@ userRouter.get('/update-password',isAuthenticated,updatePassword)
 
 // update my-profile
 userRouter.post('/update/profile',isAuthenticated,updateMyProfile)
+
+// get all user
+userRouter.get('/all-user',isAuthenticated,authorizedRoles,getAllUsers)
 
 export default userRouter

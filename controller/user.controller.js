@@ -63,3 +63,14 @@ export const updateMyProfile = asyncHandler(async(req,res)=>{
     }
     
 })
+
+// get all users
+export const getAllUsers = asyncHandler(async(req,res)=>{
+    const allUsers = await userModel.find({role:'user'})
+    if(!allUsers){
+        return res.status(404).json({success:false,message:"users not found"})
+    }
+    else{
+        res.status(200).json({success:true,message:"users found",allUsers})
+    }
+})
