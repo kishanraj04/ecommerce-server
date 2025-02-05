@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken'
 
 export const isAuthenticated = asyncHandler(async(req,res,next)=>{
     
+   
     const {token} = req.cookies
     const {id} = await jwt.verify(token,process.env.SECRET_KEY)
     const user = await userModel.findOne({_id:id})
@@ -13,6 +14,7 @@ export const isAuthenticated = asyncHandler(async(req,res,next)=>{
     }
     else{
         req.user = user
+        console.log("is authemm 0");
         next()
     }
 

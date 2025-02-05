@@ -87,3 +87,27 @@ export const getSingleUser = asyncHandler(async(req,res)=>{
         return res.status(200).json({success:true,message:"user found",singleUser})
     }
 })
+
+// change role for the user
+export const changeUserRole = asyncHandler(async(req,res)=>{
+    const {email,newRole} = req.body
+    const findUser = await userModel.findOne({email})
+    if(!findUser){
+        return res.status(404).json({success:false,message:"user not found"})
+    }else{
+        const updateData = await userModel.findOneAndUpdate(
+            { email: email },
+            { $set: { role: newRole } },
+            { new: true } 
+          );
+          
+          if(updateData){
+            return res.status(200).json({success:true,message:"user update successfully",updateData})
+          }else{
+            return res.status(401).json({success:false,message:"user updated false"})
+          }
+          
+    }
+
+   
+})

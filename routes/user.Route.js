@@ -1,5 +1,5 @@
 import express from 'express'
-import {  getAllUsers, getMyProfile, getSingleUser, signUpUser, updateMyProfile, updatePassword } from '../controller/user.controller.js'
+import {  changeUserRole, getAllUsers, getMyProfile, getSingleUser, signUpUser, updateMyProfile, updatePassword } from '../controller/user.controller.js'
 import { signInUser } from '../auth/loginUser.js'
 import { directLogin } from '../auth/directLoin.js'
 import { logoutUser } from '../auth/logoutUser.js'
@@ -35,5 +35,8 @@ userRouter.get('/all-user',isAuthenticated,authorizedRoles,getAllUsers)
 
 // get single user
 userRouter.get('/single/user/:id',isAuthenticated,authorizedRoles,getSingleUser)
+
+// change role for user
+userRouter.put('/change-user-role',isAuthenticated,authorizedRoles,changeUserRole)
 
 export default userRouter
