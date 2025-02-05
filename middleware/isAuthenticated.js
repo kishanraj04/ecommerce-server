@@ -14,7 +14,6 @@ export const isAuthenticated = asyncHandler(async(req,res,next)=>{
     }
     else{
         req.user = user
-        console.log("is authemm 0");
         next()
     }
 
