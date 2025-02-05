@@ -4,8 +4,10 @@ import dotenv from 'dotenv';
 import './config/dbConnection.js'
 import userRouter from './routes/user.Route.js';
 import cookieParser from 'cookie-parser';
+import bcrypt from 'bcrypt'
 // Load environment variables
 dotenv.config();
+
 
 
 // handling uncaught error
