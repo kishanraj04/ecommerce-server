@@ -1,5 +1,5 @@
 import express from 'express'
-import { createProduct, deletSingleProduct, getAllPoduct, getSingleProduct, priceFilter, searchProduct, updateProduct, writeReview } from '../controller/product.controller.js'
+import { createProduct, deletSingleProduct, getAllPoduct, getAllReview, getSingleProduct, priceFilter, searchProduct, updateProduct, writeReview } from '../controller/product.controller.js'
 import { isAuthenticated } from '../middleware/isAuthenticated.js'
 import { authorizedRoles } from '../middleware/authorizedRoles.js'
 
@@ -24,11 +24,14 @@ productRoute.post('/product/create',isAuthenticated,authorizedRoles,createProduc
 // search a product
 productRoute.get('/product/search/:category',isAuthenticated,searchProduct)
 
-
 // price filter 
 productRoute.get('/product/price/:gt/:lt',isAuthenticated,priceFilter)
 
 // writing review
 productRoute.post('/product/review/:id',isAuthenticated,writeReview)
+
+// get all review 
+productRoute.get('/product/get-review/:id',isAuthenticated,getAllReview)
+
 
 export default productRoute

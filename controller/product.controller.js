@@ -121,3 +121,12 @@ export const writeReview = asyncHandler(async (req,res) => {
     
     res.status(200).json({success:true , message:"reviewed",addedReview})
 })
+
+
+// get all review 
+export const getAllReview = asyncHandler(async(req,res) => {
+    const {id} = req?.params
+    const allRevie = await reviewModel.find({reviewOn:id})
+    
+    res.status(200).json({success:true , message:"geted all review" , allRevie})
+})
