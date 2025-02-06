@@ -4,8 +4,10 @@ import productSchema from "../model/product.Model.js"
 // create a product
 export const createProduct =  asyncHandler(async(req, res) => {
   
-        
-        const product =await  productSchema.create({...req.body,createdBy:req?.user?._id}); 
+        const product = await productSchema.create({
+            ...req.body,
+            createdBy: req?.user?._id
+        });
         
         if(!product){
             return res.status(422).json({sucess:false,message:"product creation failed"})

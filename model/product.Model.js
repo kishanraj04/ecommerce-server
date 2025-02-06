@@ -1,12 +1,5 @@
 import mongoose from "mongoose";
 
-const reviewSchema = new mongoose.Schema({
-  rating: { type: Number, required: true },
-  comment: { type: String, required: true },
-  date: { type: Date, default: Date.now },
-  reviewerName: { type: String, required: true },
-  reviewerEmail: { type: String, required: true },
-});
 
 const dimensionsSchema = new mongoose.Schema({
   width: { type: Number, required: true },
@@ -37,7 +30,6 @@ const productSchema = new mongoose.Schema({
   warrantyInformation: { type: String, required: true },
   shippingInformation: { type: String, required: true },
   availabilityStatus: { type: String, required: true },
-  reviews: { type: [reviewSchema], default: [] },
   returnPolicy: { type: String, required: true },
   minimumOrderQuantity: { type: Number, required: true },
   meta: { type: metaSchema, required: true },
