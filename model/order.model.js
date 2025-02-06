@@ -75,7 +75,7 @@ const orderSchema = mongoose.Schema({
     }
   },
   paidAt:{
-    type:Data,
+    type:Date,
     required:true
   },
   itemPrice:{
@@ -104,11 +104,11 @@ const orderSchema = mongoose.Schema({
     default:"processing"
   },
   deliveredAt:{
-    type:Data
+    type:Date
   },
   createdAt:{
-    type:Data,
-    default:Data.now
+    type:Date,
+    default:Date.now
   }
 
 });
