@@ -1,5 +1,6 @@
 import { asyncHandler } from "../middleware/asyncErrorHandler.js";
 import productSchema from "../model/product.Model.js"
+import reviewModel from "../model/review.Schema.js";
 
 // create a product
 export const createProduct =  asyncHandler(async(req, res) => {
@@ -109,3 +110,14 @@ export const priceFilter = asyncHandler(async (req,res) => {
     
 })
 
+
+// writin review
+export const writeReview = asyncHandler(async (req,res) => {
+    const {id} = req?.params 
+    const {rating,comment} = req?.body
+    const user = req?.user
+
+    const addedReview = await reviewModel.create({reviewOn:id , rating:rating , comment:comment , reviewer:user?._id})
+    
+    res.status(200).json({success:true , message:"reviewed",addedReview})
+})
