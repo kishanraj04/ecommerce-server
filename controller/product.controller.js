@@ -130,3 +130,16 @@ export const getAllReview = asyncHandler(async(req,res) => {
     
     res.status(200).json({success:true , message:"geted all review" , allRevie})
 })
+
+
+// deleting review --admin
+export const deleteReview = asyncHandler(async(req,res) => {
+    const {id} = req?.params
+    const deletedReview = await reviewModel.deleteOne({_id:id})
+    if(deletedReview.deletedCount>=1){
+        res.status(200).json({success:true , message:"review deleted",deletedReview})
+    }else
+    {
+        res.status(404).json({success:false,message:"review not found"})
+    }
+})
