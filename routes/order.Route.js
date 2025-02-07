@@ -1,5 +1,5 @@
 import express from 'express'
-import { getAllOrder, getSingleOrder, orderTheProduct } from '../controller/order.controller.js'
+import { getAllOrder, getLoggedInUser, getSingleOrder, orderTheProduct } from '../controller/order.controller.js'
 import { isAuthenticated } from '../middleware/isAuthenticated.js'
 import { authorizedRoles } from '../middleware/authorizedRoles.js' 
 const orderRouter = express.Router() 
@@ -12,4 +12,8 @@ orderRouter.get('/all-order',isAuthenticated,authorizedRoles,getAllOrder)
 
 // get single order
 orderRouter.get('/single/order/:id',isAuthenticated,authorizedRoles,getSingleOrder)
+
+// get logged-in user order
+orderRouter.get('/my/order',isAuthenticated,getLoggedInUser)
+
 export default orderRouter
