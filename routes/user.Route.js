@@ -6,6 +6,7 @@ import { logoutUser } from '../auth/logoutUser.js'
 import { isAuthenticated } from '../middleware/isAuthenticated.js'
 import { authorizedRoles } from '../middleware/authorizedRoles.js'
 
+
 const userRouter = express.Router()
 
 
@@ -13,7 +14,7 @@ const userRouter = express.Router()
 userRouter.post('/signUp',signUpUser)
 
 // signIn user
-userRouter.get('/signIn',signInUser)
+userRouter.post('/signIn',signInUser)
 
 // direct login
 userRouter.get('/direct-login',directLogin)

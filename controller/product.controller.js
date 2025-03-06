@@ -5,16 +5,14 @@ import reviewModel from "../model/review.Schema.js";
 // create a product
 export const createProduct =  asyncHandler(async(req, res) => {
   
-        const product = await productSchema.create({
-            ...req.body,
-            createdBy: req?.user?._id
-        });
+       
+        const product = await productSchema.insertMany(req.body);
         
-        if(!product){
-            return res.status(422).json({sucess:false,message:"product creation failed"})
-        } 
+        // if(!product){
+        //     return res.status(422).json({sucess:false,message:"product creation failed"})
+        // } 
 
-        res.status(201).json({ success: true, message: "Product created successfully", product });
+        // res.status(201).json({ success: true, message: "Product created successfully", product });
     
 });
 
@@ -30,7 +28,7 @@ export const getSingleProduct = asyncHandler(async(req,res,next)=>{
     
     const { id } = req.params;
     const product = await productSchema.findOne({ _id: id });
-    
+    console.log("id ",id);
     console.log(product);
     
     if (!product) {
@@ -79,7 +77,7 @@ export const updateProduct = asyncHandler(async(req,res)=>{
 
 // search a product
 export const searchProduct = asyncHandler(async (req, res) => {
-    const { category } = req.params;
+    const { name } = req.params;
     // MongoDB Full-Text Search
     const data = await productSchema.find({ title: { $regex:category, $options: "i" } })
 
@@ -142,4 +140,13 @@ export const deleteReview = asyncHandler(async(req,res) => {
     {
         res.status(404).json({success:false,message:"review not found"})
     }
+})
+
+
+// get category
+export const getCategoryProduct = asyncHandler(async(req,res)=>{
+   
+    const {category} = req.params
+    const data = await productSchema.find({category:category})
+    res.status(200).json({success:true , data:data})
 })

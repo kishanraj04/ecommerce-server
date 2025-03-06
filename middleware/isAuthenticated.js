@@ -5,10 +5,11 @@ import jwt from 'jsonwebtoken'
 
 export const isAuthenticated = asyncHandler(async(req,res,next)=>{
     
-   
+    
     const {token} = req.cookies
     const {id} = await jwt.verify(token,process.env.SECRET_KEY)
     const user = await userModel.findOne({_id:id})
+    console.log("auth");
     if(!token){
         res.status(401).json({success:false,message:"please login"})
     }

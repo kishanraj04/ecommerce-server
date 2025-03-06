@@ -6,7 +6,18 @@ import { hashPassword } from "../utils/password/createHash.js";
 
 // register user
 export const signUpUser = asyncHandler(async (req, res) => {
+
+  const isExistUser = await userModel.findOne({$or:[{email:req?.body?.email,contact:req?.body?.contact}]})
+
+
+  console.log(isExistUser);
+
+  if(isExistUser){
+    return res.status(200).json({success:false,message:"user Exist"})
+  }
+
   const createdUser = await userModel.create(req?.body);
+  console.log("CU ",createdUser);
   res.status(200).json({
     sucess: true,
     message: "user created sucess",
@@ -17,7 +28,6 @@ export const signUpUser = asyncHandler(async (req, res) => {
 // get my profile
 export const getMyProfile = asyncHandler(async (req, res) => {
   const user = await req.user;
-
   return res.status(200).json({ success: true, message: "user found", user });
 });
 

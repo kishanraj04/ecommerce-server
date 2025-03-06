@@ -1,5 +1,5 @@
 import express from 'express'
-import { getAllOrder, getLoggedInUser, getSingleOrder, orderTheProduct } from '../controller/order.controller.js'
+import { getAllOrder, getLoggedInUser, getSingleOrder, orderTheProduct, updateShippingAddress } from '../controller/order.controller.js'
 import { isAuthenticated } from '../middleware/isAuthenticated.js'
 import { authorizedRoles } from '../middleware/authorizedRoles.js' 
 const orderRouter = express.Router() 
@@ -15,5 +15,8 @@ orderRouter.get('/single/order/:id',isAuthenticated,authorizedRoles,getSingleOrd
 
 // get logged-in user order
 orderRouter.get('/my/order',isAuthenticated,getLoggedInUser)
+
+// update shipping address
+orderRouter.post('/update/shipping/address/:orderId',isAuthenticated,authorizedRoles,updateShippingAddress)
 
 export default orderRouter

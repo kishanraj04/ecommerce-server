@@ -20,26 +20,16 @@ const userSchema = mongoose.Schema({
         type:String,
         required:true
     },
-    avatar:{
-        url:{
-            type:String,
-            required:true
-        },
-        public_id:{
-            type:String,
-            required:true
-        }
-    },
     role:{
         type:String,
         required:true
     },
-    resetPasswordToken:{
-        type:String
-    },
-    resetPasswordExpire:{
-        type:Date
-    }
+    // resetPasswordToken:{
+    //     type:String
+    // },
+    // resetPasswordExpire:{
+    //     type:Date
+    // }
 })
 
 
