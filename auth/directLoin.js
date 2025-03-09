@@ -3,7 +3,6 @@ import jwt from 'jsonwebtoken'
 import userModel from "../model/userModel.js";
 export const directLogin = asyncHandler(async(req,res)=>{
      const {token} = req.cookies
-      console.log("token ",token);
      if(!token){
         return res.status(401).json({success:false,message:"unauthorized access , please login"})
      }

@@ -1,15 +1,14 @@
-import express from "express";
-import productRoute from "./routes/products.Route.js";
-import dotenv from "dotenv";
-import "./config/dbConnection.js";
-import userRouter from "./routes/user.Route.js";
 import cookieParser from "cookie-parser";
-import bcrypt from "bcrypt";
 import cors from "cors";
-import orderRouter from "./routes/order.Route.js";
-import multer from 'multer'
-import fs from 'fs'
+import dotenv from "dotenv";
+import express from "express";
+import fs from "fs";
+import multer from "multer";
+import "./config/dbConnection.js";
 import cartRouter from "./routes/cart.Route.js";
+import orderRouter from "./routes/order.Route.js";
+import productRoute from "./routes/products.Route.js";
+import userRouter from "./routes/user.Route.js";
 // Load environment variables
 dotenv.config();
 
@@ -19,24 +18,22 @@ process.on("uncaughtException", (err) => {
   process.exit(1);
 });
 
-
 // check wheteher the upload file is exist or not
 if (!fs.existsSync("upload")) {
   fs.mkdirSync("upload");
 }
 
-// multer configuration
+// multer configuration used as middleware
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./upload"); 
+    cb(null, "./upload");
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname); 
-    
+    cb(null, file.originalname);
   },
 });
 
-export const upload = multer({storage:storage})
+export const upload = multer({ storage: storage });
 
 const PORT = process.env.PORT;
 const app = express();
@@ -58,13 +55,13 @@ app.use(
 app.use("/api/v1", productRoute);
 
 // User Route
-app.use("/api/v1" , userRouter);
+app.use("/api/v1", userRouter);
 
 // Order Route
 app.use("/api/v1", orderRouter);
 
 // cart route
-app.use('/api/v1',cartRouter)
+app.use("/api/v1", cartRouter);
 
 // global error handler
 app.use((err, req, res, next) => {
@@ -82,7 +79,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-const server = app.listen(PORT, (err) => {
+app.listen(PORT, (err) => {
   try {
     console.log("server listen on ", PORT);
   } catch (error) {

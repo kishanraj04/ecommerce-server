@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { asyncHandler } from "../middleware/asyncErrorHandler.js";
 import productSchema from "../model/product.Model.js"
 import reviewModel from "../model/review.Schema.js";
@@ -18,8 +19,10 @@ export const createProduct =  asyncHandler(async(req, res) => {
 
 // get all product
 export const getAllPoduct = asyncHandler(async(req,res)=>{
-       
-        const product = await productSchema.find({})
+        const {limit = 20, page = 1} = req.query;
+        const skip = (page-1) * limit;
+        const product = await productSchema.find({}).skip(skip).limit(limit).sort({createdAt : -1})
+
         res.status(200).json({sucess:true,message:"get all product",product})
 })
 
@@ -27,6 +30,7 @@ export const getAllPoduct = asyncHandler(async(req,res)=>{
 export const getSingleProduct = asyncHandler(async(req,res,next)=>{
     
     const { id } = req.params;
+    if(! mongoose.isValidObjectId(id)) return next("Invalid object id")
     const product = await productSchema.findOne({ _id: id });
     console.log("id ",id);
     console.log(product);
