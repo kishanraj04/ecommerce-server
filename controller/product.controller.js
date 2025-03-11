@@ -19,9 +19,7 @@ export const createProduct =  asyncHandler(async(req, res) => {
 
 // get all product
 export const getAllPoduct = asyncHandler(async(req,res)=>{
-        const {limit = 20, page = 1} = req.query;
-        const skip = (page-1) * limit;
-        const product = await productSchema.find({}).skip(skip).limit(limit).sort({createdAt : -1})
+        const product = await productSchema.find({})
 
         res.status(200).json({sucess:true,message:"get all product",product})
 })
