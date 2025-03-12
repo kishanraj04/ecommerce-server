@@ -1,5 +1,5 @@
 import express from 'express'
-import { createProduct, deleteReview, deletSingleProduct, getAllPoduct, getAllReview, getCategoryProduct, getSingleProduct, priceFilter, searchProduct, updateProduct, writeReview } from '../controller/product.controller.js'
+import { createProduct, deleteReview, deletSingleProduct, getAllPoduct, getAllReview, getCategoryProduct, getSingleProduct, handlePagination, priceFilter, searchProduct, updateProduct, writeReview } from '../controller/product.controller.js'
 import { isAuthenticated } from '../middleware/isAuthenticated.js'
 import { authorizedRoles } from '../middleware/authorizedRoles.js'
 
@@ -38,5 +38,8 @@ productRoute.get('/product/get-review/:id',isAuthenticated,getAllReview)
 
 // delete a review
 productRoute.delete('/product/review/delete/:id',isAuthenticated,authorizedRoles,deleteReview)
+
+// pagination route
+productRoute.get('/page/limit/:no',isAuthenticated,handlePagination)
 
 export default productRoute

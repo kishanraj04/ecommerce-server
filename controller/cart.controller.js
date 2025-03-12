@@ -1,13 +1,15 @@
 import mongoose from "mongoose";
 import { asyncHandler } from "../middleware/asyncErrorHandler.js";
 import { cartModel } from "../model/cart.model.js";
+import productSchema from "../model/product.Model.js"
 
 
 export const addToCart = asyncHandler(async (req, res) => {
   
       const userId = req?.user?._id; // Extracting user ID from request
       const { productId,qty } = req.body; // Expecting an array of cart items
-      console.log(userId , productId , qty);
+      
+      const {price} = await productSchema.findOne({_id:productId})
 
       if (!userId) {
           return res.status(401).json({ success: false, message: "Unauthorized: User ID is required" });
@@ -19,7 +21,7 @@ export const addToCart = asyncHandler(async (req, res) => {
         cartItem.save()
         return res.status(200).json({success:true,message:"product qty updated",cartItem})
       }
-      const resp = await cartModel.create({userId:userId,productId:productId,qty})
+      const resp = await cartModel.create({userId:userId,productId:productId,qty,price:price})
       res.status(200).json({success:true,message:"product add in the cart",resp})
 
     }
