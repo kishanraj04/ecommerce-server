@@ -5,8 +5,18 @@ import { wishListModel } from "../model/wishlist.model.js";
 export const addToWishList = asyncHandler(async(req,res)=>{
     const {_id} = req?.user
     const {pid,price} = req?.body
+    console.log(_id,pid,price);
     const inserted_data = await wishListModel.create({userId:_id,productId:pid,price:price})
     
-    res.json(inserted_data)
+    res.status(200).json({success:true,inserted_data})
 
+})
+
+export const getAllWishListData = asyncHandler(async(req,res)=>{
+    const {_id} = req?.user 
+    const wishListData = await wishListModel.find({userId:_id})
+    if(!wishListData){
+        return res.status(404).json({success:false,message:"user not found"})
+    }
+    res.status(200).json({success:true,message:"data found",wishListData})
 })
