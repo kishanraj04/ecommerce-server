@@ -10,6 +10,7 @@ import orderRouter from "./routes/order.Route.js";
 import productRoute from "./routes/products.Route.js";
 import userRouter from "./routes/user.Route.js";
 import contactRouter from "./routes/contact.Route.js";
+import { wishListRouter } from "./routes/wishList.Route.js";
 // Load environment variables
 dotenv.config();
 
@@ -66,6 +67,9 @@ app.use("/api/v1", cartRouter);
 
 // contact route
 app.use('/api/v1',contactRouter)
+
+// wishList route
+app.use('/api/v1' , wishListRouter)
 
 // global error handler
 app.use((err, req, res, next) => {
