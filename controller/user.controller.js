@@ -7,6 +7,7 @@ import { hashPassword } from "../utils/password/createHash.js";
 // register user
 export const signUpUser = asyncHandler(async (req, res) => {
 
+  console.log("req ",req?.body);
   const isExistUser = await userModel.findOne({$or:[{email:req?.body?.email,contact:req?.body?.contact}]})
 
 
