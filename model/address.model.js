@@ -11,11 +11,11 @@ const address_schema = mongoose.Schema({
     required: true,
   },
   contact: {
-    type: Number,
+    type: [Number,"please enter digit"],
     required: true,
   },
   pincode: {
-    type: Number,
+    type:  [Number,"please enter digit"],
     required: true,
   },
   locality: {
@@ -39,9 +39,13 @@ const address_schema = mongoose.Schema({
     required: true,
   },
   alternatecontact: {
-    type: Number,
+    type:  [Number,"please enter digit"],
     required: true,
   },
+  addressType:{
+    type:String,
+    required:true
+  }
 });
 
 export const addressmodel = mongoose.model("addressmodel", address_schema);

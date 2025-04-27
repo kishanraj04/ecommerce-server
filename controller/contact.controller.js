@@ -21,9 +21,22 @@ export const handleSendContact = asyncHandler(async(req,res)=>{
 export const saveDeliveryAddress = asyncHandler(async(req,res)=>{
     const address = req?.body 
     const userId = req?.user?._id;
+    console.log(address);
     const newAddress = await addressmodel.create({...address,userId})
     if(!newAddress){
         return res.status(500).json({success:false,message:"address not saved"})
     }
     res.status(200).json(newAddress)
+})
+
+// get user delivery address
+export const getAllDeliveryAddress = asyncHandler(async(req,res)=>{
+    const {uid} = req?.params
+    
+    const response = await addressmodel.find({userId:uid})
+    if(!response){
+        return res.status(404).json({success:false,message:"delivery address not found"})
+    }
+    
+    res.status(200).json({success:true,data:response})
 })
