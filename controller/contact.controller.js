@@ -63,3 +63,16 @@ export const updateDeliveryAddress = asyncHandler(async (req, res) => {
   }
   return res.json(updateAddress);
 });
+
+
+// delete address
+export const deleteDeliveryAddress = asyncHandler(async(req,res)=>{
+    const {id} = req?.params
+    const deletedAddress = await addressmodel.findByIdAndDelete({_id:id})
+    if(!deleteDeliveryAddress){
+      res.status(500).json({success:false,message:"deletion failed"})
+  
+    }
+    res.status(200).json({success:true,message:"address deleted"})
+
+})
