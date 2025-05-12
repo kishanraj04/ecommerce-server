@@ -1,33 +1,36 @@
 import { asyncHandler } from "../middleware/asyncErrorHandler.js";
 import orderModel from '../model/order.model.js'
+import productModel from "../model/product.Model.js";
 import userModel from "../model/userModel.js";
 import { updateStock } from "../utils/updateStock/updateStock.js";
 
 // creating order
 export const orderTheProduct = asyncHandler(async (req,res)=>{
     const loginUser = req?.user
-    console.log(loginUser);
-    const data = {...(req?.body ),user:loginUser?._id}
-    console.log("data ",data);
-    const addedOrder = await orderModel.create(data)
-
-    res.status(200).json({success:true , message:"product order successfull",addedOrder})
+    console.log("l u " ,loginUser?._id);
+    const data = req?.body
+    const createdOrder = await orderModel.create({shippingInfo:data?.shippingInfo,orderItems:data?.orderItems,user:loginUser?._id,paymentInfo:{paymentMethod:"cash",paymentStatus:"pending"},totalPrice:data?.totalPrice})
+    console.log(createdOrder);
+    const productsWithStock = await Promise.all(
+        createdOrder?.orderItems?.map(async ({ pid, qty }) => {
+          const product = await productModel.findById(pid, { stock: 1 });
+          if(product.stock>=qty){
+            product.stock-=qty
+            product.save();
+          }
+        })
+      );
+      
+    res.status(200).json({success:true,createdOrder})
+    
 })
 
 
 // get all order
 export const getAllOrder = asyncHandler(async (req,res) => {
     const allOrder = await orderModel.find({})
-    let totalprice = 0;
-    allOrder.map(({totalPrice})=>{
-        totalprice+=totalPrice
-    })
-    if(!allOrder){
-        return res.status(204).json({success:true,message:"order not available"})
-    }
-    else{
-        res.status(200).json({success:true,message:"order found","total-order":allOrder.length,allOrder:{totalprice,...allOrder}})
-    }
+    console.log(allOrder);
+    res.status(200).json({success:true,allOrder})
 })
 
 

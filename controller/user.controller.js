@@ -7,18 +7,13 @@ import { hashPassword } from "../utils/password/createHash.js";
 // register user
 export const signUpUser = asyncHandler(async (req, res) => {
 
-  console.log("req ",req?.body);
   const isExistUser = await userModel.findOne({$or:[{email:req?.body?.email,contact:req?.body?.contact}]})
-
-
-  console.log(isExistUser);
 
   if(isExistUser){
     return res.status(200).json({success:false,message:"user Exist"})
   }
 
   const createdUser = await userModel.create(req?.body);
-  console.log("CU ",createdUser);
   res.status(200).json({
     sucess: true,
     message: "user created sucess",
@@ -35,7 +30,7 @@ export const getMyProfile = asyncHandler(async (req, res) => {
 // update password
 export const updatePassword = asyncHandler(async (req, res) => {
   const { oldPassword, newPassword, confirmPassword } = req?.body;
-  console.log(oldPassword, newPassword, confirmPassword);
+  // console.log(oldPassword, newPassword, confirmPassword);
   if (newPassword != confirmPassword) {
     return res
       .status(200)
@@ -52,9 +47,7 @@ export const updatePassword = asyncHandler(async (req, res) => {
       .status(401)
       .json({ success: false, message: "invalid password" });
   }
-  console.log(isCorrect);
   const hash = await hashPassword(newPassword);
-  console.log(hash);
   const updateUser = await userModel.findByIdAndUpdate(_id, {
     $set: { password: hash },
   });
@@ -85,7 +78,7 @@ export const updateMyProfile = asyncHandler(async (req, res) => {
 
 // get all users --admin
 export const getAllUsers = asyncHandler(async (req, res) => {
-  const allUsers = await userModel.find({ role: "user" });
+  const allUsers = await userModel.find({});
   if (!allUsers) {
     return res.status(404).json({ success: false, message: "users not found" });
   } else {
@@ -136,10 +129,10 @@ export const changeUserRole = asyncHandler(async (req, res) => {
   }
 });
 
-// delete a user
+// delete a user --admin
 export const deleteUser = asyncHandler(async (req, res) => {
-  const { email } = req.body;
-  const deletedUser = await userModel.deleteOne({ email: email });
+  const {uid} = req.params;
+  const deletedUser = await userModel.deleteOne({ _id: uid });
   if(deletedUser.deletedCount>=1)
   {
     
@@ -150,3 +143,19 @@ export const deleteUser = asyncHandler(async (req, res) => {
     return res.status(204).json({success:false,message:"user not deleted"})
   }
 });
+
+// update user --admin
+export const updateUserData = asyncHandler(async(req,res)=>{
+  const data = req?.body
+
+  const updatedUser = await userModel.findByIdAndUpdate( data?._id,
+    { $set: data },
+    { new: true })
+
+    if(!updateUserData){
+      return res.status(404).json({sucess:false,message:"update failed"})
+    }else{
+      res.status(200).json({success:true,message:"user updated",updatedUser})
+    }
+
+})

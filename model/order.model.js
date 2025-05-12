@@ -6,27 +6,15 @@ const orderSchema = mongoose.Schema({
       type: String,
       required: true,
     },
-    email: {
-      type: String,
-      required: true,
-    },
     contact: {
-      type: String,
+      type: Number,
       required: true,
     },
-    alternatePhone: {
-      type: String,
+    pincode: {
+      type: Number,
       required: true,
     },
-    city: {
-      type: String,
-      required: true,
-    },
-    region: {
-      type: String,
-      required: true,
-    },
-    state: {
+    locality: {
       type: String,
       required: true,
     },
@@ -34,83 +22,82 @@ const orderSchema = mongoose.Schema({
       type: String,
       required: true,
     },
+
+    city: {
+      type: String,
+      required: true,
+    },
+    state: {
+      type: String,
+      required: true,
+    },
     landMark: {
       type: String,
     },
+    alternatePhone: {
+      type: Number,
+    },
   },
-  orderItems:[
+  orderItems: [
     {
-     name:{
+      price: {
+        type: Number,
+        required: true,
+      },
+      qty: {
+        type: Number,
+        required: true,
+      },
+      category:{
         type:String,
-        required:true
-     },
-     price:{
-        type:Number,
-        required:true
-     },
-     qty:{
-        type:Number,
-        required:true
-     },
-     product:{
-        type:mongoose.Schema.ObjectId,
-        ref:"Product",
-        required:true
-     }
-    }
+        required:true,
+      },
+      pid: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+        required: true,
+      },
+    },
   ],
-  user:{
-    type:mongoose.Schema.ObjectId,
-    ref:"usermodel", 
-    required:true
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "usermodel",
+    required: true,
   },
-  paymentInfo:{
-    paymentId:{
-        type:String,
-        required:true
+  paymentInfo: {
+    paymentMethod:{
+      type: String,
+      required:true
     },
     paymentStatus:{
-        type:String,
-        required:true
-    }
+      type: String,
+      required: true,
+    },
   },
-  paidAt:{
-    type:Date,
-    required:true
+  paidAt: {
+    type: Date,
   },
-  itemPrice:{
-    type:Number,
-    required:true,
-    default:0
+  tax: {
+    type: Number,
+    default: 0,
   },
-  tax:{
-    type:Number,
-    required:true,
-    default:0
+  totalPrice: {
+    type: Number,
+    required: true,
+    default: 0,
   },
-  shippingPrice:{
-    type:Number,
-    required:true,
-    default:0
+  orderStatus: {
+    type: String,
+    required: true,
+    default: "processing",
   },
-  totalPrice:{
-    type:Number,
-    required:true,
-    default:0
+  deliveredAt: {
+    type: Date,
   },
-  orderStatus:{
-    type:String,
-    required:true,
-    default:"processing"
+  createdAt: {
+    type: Date,
+    default: Date.now,
   },
-  deliveredAt:{
-    type:Date
-  },
-  createdAt:{
-    type:Date,
-    default:Date.now
-  }
-
 });
 
-export default mongoose.model('orderModel',orderSchema)
+export default mongoose.model("orderModel", orderSchema);

@@ -79,6 +79,7 @@ export const updateProduct = asyncHandler(async (req, res) => {
 // search a product
 export const searchProduct = asyncHandler(async (req, res) => {
   const { name } = req.params;
+  console.log(name);
   // MongoDB Full-Text Search
   const data = await productSchema.find({
     title: { $regex: name, $options: "i" },
@@ -170,3 +171,38 @@ export const handlePagination = asyncHandler(async (req, res) => {
 
   res.status(200).json({ success: true, data: product });
 });
+
+// filter
+export const getFilteredProducts = async (req, res) => {
+  try {
+    const { categories,price} = req.params;
+    const filterCat = JSON.parse(categories)
+    const priceRange = JSON.price(price)
+
+    let filter = {};
+
+    if (filterCat.length > 0) {
+      filter.category = { $in: filterCat };
+    }
+    console.log(filter);
+    const products = await productSchema.find(filter);
+
+    res.status(200).json(products);
+  } catch (error) {
+    console.error("Error fetching filtered products:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
+// get distince category
+export const getDistinceCategory = asyncHandler(async(req,res)=>{
+  const response = await productSchema.distinct("category")
+  res.status(200).json({success:true,categories:response})
+})
+
+// show more product
+export const showMoreProduct = asyncHandler(async(req,res)=>{
+  const {range} = req?.params;
+  const product = await productSchema.find().limit(10*range);
+  res.status(200).json({product})
+})

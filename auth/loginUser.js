@@ -13,6 +13,8 @@ export const signInUser = asyncHandler(async (req,res)=>{
     if(isCorrect){
       req.user = user
       return  generateAndSaveToken(user?._id,req,res)
+    }else{
+      return res.status(401).json({success:false,message:"unauthorized access"})
     }
    
 })

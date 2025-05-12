@@ -30,7 +30,7 @@ export const saveDeliveryAddress = asyncHandler(async (req, res) => {
   const address = req?.body;
   const userId = req?.user?._id;
   console.log(address);
-  const newAddress = await addressmodel.create({ ...address, userId });
+  const newAddress = await addressmodel.create({ ...address,userId});
   if (!newAddress) {
     return res
       .status(500)
