@@ -201,8 +201,22 @@ export const getDistinceCategory = asyncHandler(async(req,res)=>{
 })
 
 // show more product
-export const showMoreProduct = asyncHandler(async(req,res)=>{
-  const {range} = req?.params;
-  const product = await productSchema.find().limit(10*range);
-  res.status(200).json({product})
-})
+export const showMoreProduct = asyncHandler(async (req, res) => {
+  const { range } = req.params;
+  const rangeNum = parseInt(range, 10);
+
+  if (isNaN(rangeNum) || rangeNum <= 0) {
+    return res.status(400).json({ message: "Invalid range value" });
+  }
+
+  const totalCount = await productSchema.countDocuments();
+  
+
+  const products = await productSchema.find().limit(50 * rangeNum);
+
+  if((range*50)>totalCount){
+    return res.status(200).json({success:false,message:"product over",products})
+  }
+
+  res.status(200).json({ products, totalCount });
+});
