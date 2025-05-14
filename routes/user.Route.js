@@ -1,5 +1,5 @@
 import express from 'express'
-import {  changeUserRole, deleteUser, getAllUsers, getMyProfile, getSingleUser, signUpUser, updateMyProfile, updatePassword, updateUserData } from '../controller/user.controller.js'
+import {  changeUserRole, deleteUser, getAllUsers, getMyProfile, getSingleUser, getUserThisWeek, signUpUser, updateMyProfile, updatePassword, updateUserData } from '../controller/user.controller.js'
 import { signInUser } from '../auth/loginUser.js'
 import { directLogin } from '../auth/directLoin.js'
 import { logoutUser } from '../auth/logoutUser.js'
@@ -45,5 +45,8 @@ userRouter.delete('/delete/user/:uid',isAuthenticated,authorizedRoles,deleteUser
 
 // update single user
 userRouter.put('/user/update/single',isAuthenticated,authorizedRoles,updateUserData)
+
+// register user in this week --admin
+userRouter.get('/user/this-week',isAuthenticated,authorizedRoles,getUserThisWeek)
 
 export default userRouter

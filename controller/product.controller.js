@@ -1,8 +1,10 @@
 import mongoose from "mongoose";
+import multer from 'multer'
 import { asyncHandler } from "../middleware/asyncErrorHandler.js";
 import productSchema from "../model/product.Model.js";
 import reviewModel from "../model/review.Schema.js";
-
+import cloudinary from "../utils/cloudinary/cloudinary.js";
+import fs from 'fs'
 // create a product
 export const createProduct = asyncHandler(async (req, res) => {
   const product = await productSchema.insertMany(req.body);
@@ -219,4 +221,46 @@ export const showMoreProduct = asyncHandler(async (req, res) => {
   }
 
   res.status(200).json({ products, totalCount });
+});
+
+
+
+
+// create new product
+export const createNewProduct = asyncHandler(async (req, res) => {
+  const { body, files } = req;
+
+  console.log(files);
+  // Thumbnail upload
+  const thumbnailResult = await cloudinary.uploader.upload(
+    files.thumbnail[0].path,
+    { folder: 'products/thumbnail' }
+  );
+  
+
+  const imageUrls = [];
+
+  for (const img of files.images || []) {
+    const result = await cloudinary.uploader.upload(img.path, {
+      folder: 'products/images',
+    });
+    imageUrls.push(result.secure_url);
+    
+  }
+
+  // Now you can use thumbnailResult.secure_url and imageUrls in your DB save
+  const productData = {
+    ...body,
+    thumbnail: thumbnailResult.secure_url,
+    images: imageUrls,
+  };
+
+  const createdProduct = await productSchema.create(productData)
+  
+
+  res.status(201).json({
+    success: true,
+    message: 'Product created and uploaded to Cloudinary',
+    createProduct,
+  });
 });

@@ -6,11 +6,12 @@ import { hashPassword } from "../utils/password/createHash.js";
 
 // register user
 export const signUpUser = asyncHandler(async (req, res) => {
+  const isExistUser = await userModel.findOne({
+    $or: [{ email: req?.body?.email, contact: req?.body?.contact }],
+  });
 
-  const isExistUser = await userModel.findOne({$or:[{email:req?.body?.email,contact:req?.body?.contact}]})
-
-  if(isExistUser){
-    return res.status(200).json({success:false,message:"user Exist"})
+  if (isExistUser) {
+    return res.status(200).json({ success: false, message: "user Exist" });
   }
 
   const createdUser = await userModel.create(req?.body);
@@ -66,13 +67,11 @@ export const updateMyProfile = asyncHandler(async (req, res) => {
   );
 
   if (updatedUser) {
-    return res
-      .status(200)
-      .json({
-        success: true,
-        message: "user updated successfully",
-        updatedUser,
-      });
+    return res.status(200).json({
+      success: true,
+      message: "user updated successfully",
+      updatedUser,
+    });
   }
 });
 
@@ -114,13 +113,11 @@ export const changeUserRole = asyncHandler(async (req, res) => {
     );
 
     if (updateData) {
-      return res
-        .status(200)
-        .json({
-          success: true,
-          message: "user update successfully",
-          updateData,
-        });
+      return res.status(200).json({
+        success: true,
+        message: "user update successfully",
+        updateData,
+      });
     } else {
       return res
         .status(401)
@@ -131,31 +128,57 @@ export const changeUserRole = asyncHandler(async (req, res) => {
 
 // delete a user --admin
 export const deleteUser = asyncHandler(async (req, res) => {
-  const {uid} = req.params;
+  const { uid } = req.params;
   const deletedUser = await userModel.deleteOne({ _id: uid });
-  if(deletedUser.deletedCount>=1)
-  {
-    
-    return res.status(200).json({success:true,message:"user deleted success",deletedUser})
-  }else
-  {
-
-    return res.status(204).json({success:false,message:"user not deleted"})
+  if (deletedUser.deletedCount >= 1) {
+    return res
+      .status(200)
+      .json({ success: true, message: "user deleted success", deletedUser });
+  } else {
+    return res
+      .status(204)
+      .json({ success: false, message: "user not deleted" });
   }
 });
 
 // update user --admin
-export const updateUserData = asyncHandler(async(req,res)=>{
-  const data = req?.body
+export const updateUserData = asyncHandler(async (req, res) => {
+  const data = req?.body;
 
-  const updatedUser = await userModel.findByIdAndUpdate( data?._id,
+  const updatedUser = await userModel.findByIdAndUpdate(
+    data?._id,
     { $set: data },
-    { new: true })
+    { new: true }
+  );
 
-    if(!updateUserData){
-      return res.status(404).json({sucess:false,message:"update failed"})
-    }else{
-      res.status(200).json({success:true,message:"user updated",updatedUser})
-    }
+  if (!updateUserData) {
+    return res.status(404).json({ sucess: false, message: "update failed" });
+  } else {
+    res
+      .status(200)
+      .json({ success: true, message: "user updated", updatedUser });
+  }
+});
 
-})
+// get signup user in this week
+export const getUserThisWeek = asyncHandler(async (req, res) => {
+  const startOfWeek = new Date();
+  startOfWeek.setHours(0, 0, 0, 0);
+  startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay()); // Sunday
+
+  const endOfWeek = new Date(startOfWeek);
+  endOfWeek.setDate(startOfWeek.getDate() + 7); // Next Sunday
+
+  try {
+    const count = await userModel.countDocuments({
+      createdAt: {
+        $gte: startOfWeek,
+        $lt: endOfWeek,
+      },
+    });
+
+    res.json({ count });
+  } catch (err) {
+    res.status(500).json({ error: 'Internal Server Error', details: err.message });
+  }
+});

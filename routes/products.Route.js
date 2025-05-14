@@ -1,7 +1,8 @@
 import express from 'express'
-import { createProduct, deleteReview, deletSingleProduct, getAllPoduct, getAllReview, getCategoryProduct, getDistinceCategory, getFilteredProducts, getSingleProduct, handlePagination, priceFilter, searchProduct, showMoreProduct, updateProduct, writeReview } from '../controller/product.controller.js'
+import { createNewProduct, createProduct, deleteReview, deletSingleProduct, getAllPoduct, getAllReview, getCategoryProduct, getDistinceCategory, getFilteredProducts, getSingleProduct, handlePagination, priceFilter, searchProduct, showMoreProduct, updateProduct, writeReview } from '../controller/product.controller.js'
 import { isAuthenticated } from '../middleware/isAuthenticated.js'
 import { authorizedRoles } from '../middleware/authorizedRoles.js'
+import multer from 'multer'
 
 const productRoute = express.Router()
 
@@ -50,5 +51,26 @@ productRoute.get('/product/distinct/category',isAuthenticated,getDistinceCategor
 
 // show more product
 productRoute.get('/product/showmore/:range',isAuthenticated,authorizedRoles,showMoreProduct)
+
+// create new product
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './upload'); // Ensure this directory exists
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname); // ⚠️ Be cautious: this may overwrite files
+  },
+});
+
+const upload = multer({ storage });
+
+const multipleUpload = upload.fields([
+  { name: 'thumbnail', maxCount: 1 },
+  { name: 'images', maxCount: 10 },
+]);
+
+
+productRoute.post('/create/product',isAuthenticated,authorizedRoles,multipleUpload,createNewProduct)
 
 export default productRoute
