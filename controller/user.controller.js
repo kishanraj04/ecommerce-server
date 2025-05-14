@@ -179,6 +179,25 @@ export const getUserThisWeek = asyncHandler(async (req, res) => {
 
     res.json({ count });
   } catch (err) {
-    res.status(500).json({ error: 'Internal Server Error', details: err.message });
+    res
+      .status(500)
+      .json({ error: "Internal Server Error", details: err.message });
   }
+});
+
+// get register user today
+export const getTodayRegisterUser = asyncHandler(async (req, res) => {
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
+
+  const endOfToday = new Date();
+  endOfToday.setHours(23, 59, 59, 999);
+  const count = await userModel.countDocuments({
+    createdAt: {
+      $gte: startOfToday,
+      $lte: endOfToday,
+    },
+  });
+
+  res.json({ registeredToday: count });
 });
