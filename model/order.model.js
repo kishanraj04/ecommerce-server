@@ -98,6 +98,10 @@ const orderSchema = mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  date:{
+    type:String,
+    default:Date.now()
+  }
 });
 
 export default mongoose.model("orderModel", orderSchema);

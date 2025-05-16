@@ -224,8 +224,6 @@ export const showMoreProduct = asyncHandler(async (req, res) => {
 });
 
 
-
-
 // create new product
 export const createNewProduct = asyncHandler(async (req, res) => {
   const { body, files } = req;
@@ -263,4 +261,26 @@ export const createNewProduct = asyncHandler(async (req, res) => {
     message: 'Product created and uploaded to Cloudinary',
     createProduct,
   });
+});
+
+
+// update product --admin
+export const updateSingleProduct = asyncHandler(async (req, res) => {
+  const body = req.body;
+
+  if (!body?._id) {
+    return res.status(400).json({ message: "Product ID (_id) is required" });
+  }
+
+  const updateResp = await productSchema.findByIdAndUpdate(
+    body._id,
+    { $set: body },
+    { new: true } 
+  );
+
+  if (updateResp) {
+    return res.status(200).json({success:true, message: "Product updated", product: updateResp });
+  } else {
+    return res.status(404).json({ message: "Product not found" });
+  }
 });

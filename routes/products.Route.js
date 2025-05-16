@@ -1,5 +1,5 @@
 import express from 'express'
-import { createNewProduct, createProduct, deleteReview, deletSingleProduct, getAllPoduct, getAllReview, getCategoryProduct, getDistinceCategory, getFilteredProducts, getSingleProduct, handlePagination, priceFilter, searchProduct, showMoreProduct, updateProduct, writeReview } from '../controller/product.controller.js'
+import { createNewProduct, createProduct, deleteReview, deletSingleProduct, getAllPoduct, getAllReview, getCategoryProduct, getDistinceCategory, getFilteredProducts, getSingleProduct, handlePagination, priceFilter, searchProduct, showMoreProduct, updateProduct, updateSingleProduct, writeReview } from '../controller/product.controller.js'
 import { isAuthenticated } from '../middleware/isAuthenticated.js'
 import { authorizedRoles } from '../middleware/authorizedRoles.js'
 import multer from 'multer'
@@ -72,5 +72,10 @@ const multipleUpload = upload.fields([
 
 
 productRoute.post('/create/product',isAuthenticated,authorizedRoles,multipleUpload,createNewProduct)
+
+
+// update product
+productRoute.post('/product/single/update',isAuthenticated,authorizedRoles,updateSingleProduct)
+
 
 export default productRoute

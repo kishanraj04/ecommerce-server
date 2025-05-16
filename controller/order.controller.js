@@ -86,3 +86,16 @@ export const updateShippingAddress = asyncHandler(async (req,res) => {
     await order.save({validateBeforesave:false})
     res.status(200).json({success:true})
 })
+
+// update the product status --admin
+export const updateProductStatus = asyncHandler(async(req,res)=>{
+    const {oid,status} = req?.body
+    
+    const updateOrder = await orderModel.findByIdAndUpdate({_id:oid},{$set:{orderStatus:status}})
+
+    if(!updateOrder){
+        return res.status(500).json({success:false,message:"Failed To Update"})
+    }
+
+    res.status(200).json({success:true,updateOrder})
+})
